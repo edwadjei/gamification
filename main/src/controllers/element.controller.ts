@@ -1,5 +1,5 @@
 import { Context } from 'koa';
-import { elementService } from '../services/element.service';
+import { elementService } from '../services';
 import { ValidationError } from '../middleware/error-handlers/validation-error';
 
 export const elementController = {

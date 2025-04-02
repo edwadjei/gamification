@@ -1,5 +1,5 @@
 import { Context } from 'koa';
-import { userService } from '../services/user.service';
+import { userService } from '../services';
 import { ValidationError } from '../middleware/error-handlers/validation-error';
 
 export const userController = {

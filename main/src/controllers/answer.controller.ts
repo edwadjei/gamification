@@ -1,6 +1,6 @@
 import { Context } from 'koa';
 import { ValidationError } from '../middleware/error-handlers/validation-error';
-import { answerService } from '../services/answer.service';
+import { answerService } from '../services';
 
 export const answerController = {
   async submitUserAnswer(ctx: Context): Promise<void> {

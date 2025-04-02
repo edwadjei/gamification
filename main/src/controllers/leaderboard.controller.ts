@@ -1,5 +1,5 @@
 import { Context } from 'koa';
-import { leaderboardService } from '../services/leaderboard.service';
+import { leaderboardService } from '../services';
 
 export const leaderboardController = {
   async getLeaderboard(ctx: Context): Promise<void> {

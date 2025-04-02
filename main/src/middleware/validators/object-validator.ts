@@ -1,7 +1,7 @@
 import { Context, Next } from 'koa';
 import { validate as uuidValidate } from 'uuid';
 
-export const validate = (schema: Record<string, any>) => {
+export const validateRequest = (schema: Record<string, any>) => {
   return async (ctx: Context, next: Next): Promise<void> => {
     const data = ctx.request.body as { [key: string]: any };
     const errors: string[] = [];
