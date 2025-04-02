@@ -2,7 +2,60 @@ import { Context } from 'koa';
 import { elementService } from '../services';
 import { ValidationError } from '../middleware/error-handlers/validation-error';
 
+/**
+ * @swagger
+ * tags:
+ *   name: Elements
+ *   description: Element management
+ */
 export const elementController = {
+  /**
+   * @swagger
+   * /elements:
+   *   post:
+   *     summary: Create a new element
+   *     tags: [Elements]
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             required:
+   *               - eventId
+   *               - projectId
+   *               - scores
+   *             properties:
+   *               eventId:
+   *                 type: string
+   *                 format: uuid
+   *                 example: "123e4567-e89b-12d3-a456-426614174000"
+   *               projectId:
+   *                 type: string
+   *                 format: uuid
+   *                 example: "123e4567-e89b-12d3-a456-426614174000"
+   *               scores:
+   *                 type: number
+   *                 example: 10
+   *     responses:
+   *       201:
+   *         description: Element created successfully
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 elementId:
+   *                   type: string
+   *                   format: uuid
+   *                 message:
+   *                   type: string
+   *                   example: "Element created successfully."
+   *       400:
+   *         description: Invalid input
+   *       500:
+   *         description: Server error
+   */
   async createElement(ctx: Context): Promise<void> {
     const { eventId, projectId, scores } = ctx.request.body as {
       eventId: string;
@@ -32,6 +85,50 @@ export const elementController = {
     }
   },
 
+  /**
+   * @swagger
+   * /elements/{elementId}/right-answer:
+   *   put:
+   *     summary: Set the correct answer for an element
+   *     tags: [Elements]
+   *     parameters:
+   *       - in: path
+   *         name: elementId
+   *         required: true
+   *         schema:
+   *           type: string
+   *           format: uuid
+   *         description: Element's unique ID
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             required:
+   *               - rightAnswer
+   *             properties:
+   *               rightAnswer:
+   *                 type: number
+   *                 example: 3
+   *     responses:
+   *       200:
+   *         description: Correct answer updated
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 message:
+   *                   type: string
+   *                   example: "Correct answer updated and score calculation triggered."
+   *       400:
+   *         description: Invalid input
+   *       404:
+   *         description: Element not found
+   *       500:
+   *         description: Server error
+   */
   async setRightAnswer(ctx: Context): Promise<void> {
     const elementId = ctx.params.elementId;
     const { rightAnswer } = ctx.request.body as { rightAnswer: number };
