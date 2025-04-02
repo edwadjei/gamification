@@ -1,0 +1,37 @@
+{
+  "name": "main",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "node dist/app.js",
+    "dev": "ts-node-dev --respawn src/app.ts",
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@koa/cors": "^5.0.0",
+    "@koa/router": "^13.1.0",
+    "bull": "^4.16.5",
+    "dotenv": "^16.4.7",
+    "ioredis": "^5.6.0",
+    "koa": "^2.16.0",
+    "koa-bodyparser": "^4.4.1",
+    "mysql2": "^3.14.0",
+    "reflect-metadata": "^0.2.2",
+    "ts-node": "^10.9.2",
+    "typeorm": "^0.3.21",
+    "typeorm-naming-strategies": "^4.1.0",
+    "typescript": "^5.8.2",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@types/bull": "^4.10.4",
+    "@types/koa": "^2.15.0",
+    "@types/koa-bodyparser": "^4.3.12",
+    "@types/koa__cors": "^5.0.0",
+    "@types/node": "^22.13.14",
+    "@types/uuid": "^10.0.0",
+    "ts-node-dev": "^2.0.0"
+  }
+}
