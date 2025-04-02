@@ -29,7 +29,7 @@ export const leaderboardService = {
     // Try to get from cache first
     try {
       const cachedLeaderboard = await redisClient.get(cacheKey);
-      if (cachedLeaderboard) {
+      if (cachedLeaderboard?.length) {
         console.log('Returning leaderboard from cache');
         return JSON.parse(cachedLeaderboard);
       }
