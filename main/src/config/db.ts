@@ -1,8 +1,11 @@
 import 'dotenv/config';
 import { DataSource } from 'typeorm';
-import { Element, Score } from '../models';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import * as mysql from 'mysql2/promise';
+import { Element, Score, User, UserAnswer } from '../models';
+
+// const entities = ['./models/*.ts'];
+const entities = [Element, User, UserAnswer, Score];
 
 // Configure the main DataSource
 export const AppDataSource = new DataSource({
@@ -14,7 +17,7 @@ export const AppDataSource = new DataSource({
   database: process.env.DB_NAME || 'gamification',
   synchronize: true,
   logging: false,
-  entities: [Element, Score],
+  entities,
   namingStrategy: new SnakeNamingStrategy(),
 });
 
