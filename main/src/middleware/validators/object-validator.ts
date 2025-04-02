@@ -1,52 +1,49 @@
 import { Context, Next } from 'koa';
-import { validate as uuidValidate } from 'uuid';
+import { Schema, validators } from './schemas';
+import { ValidationError } from '../error-handlers/validation-error';
 
-export const validateRequest = (schema: Record<string, any>) => {
-  return async (ctx: Context, next: Next): Promise<void> => {
-    const data = ctx.request.body as { [key: string]: any };
+export function validateRequest(schema: Schema) {
+  return async (ctx: Context, next: Next) => {
+    // Cast the request body as a record with string keys and any values
+    const body = ctx.request.body as Record<string, any>;
     const errors: string[] = [];
 
-    // Validate required fields
-    Object.keys(schema).forEach((field) => {
-      const fieldSchema = schema[field];
+    // Check each field in the schema
+    for (const [field, schemaField] of Object.entries(schema)) {
+      const value = body[field];
 
-      // Check required fields
-      if (
-        fieldSchema.required &&
-        (data[field] === undefined || data[field] === null)
-      ) {
-        errors.push(`${field} is required`);
-        return;
-      }
+      // Apply each validation
+      for (const validation of schemaField.validations) {
+        const isValid = validators[validation](value);
 
-      if (data[field] !== undefined && data[field] !== null) {
-        // Validate types
-        if (fieldSchema.type === 'uuid' && !uuidValidate(data[field])) {
-          errors.push(`${field} must be a valid UUID`);
-        }
-
-        if (fieldSchema.type === 'number' && typeof data[field] !== 'number') {
-          errors.push(`${field} must be a number`);
-        }
-
-        // Validate number constraints
-        if (fieldSchema.type === 'number' && typeof data[field] === 'number') {
-          if (fieldSchema.positive && data[field] <= 0) {
-            errors.push(`${field} must be a positive number`);
+        if (!isValid) {
+          switch (validation) {
+            case 'required':
+              errors.push(`${field} is required`);
+              break;
+            case 'string':
+              errors.push(`${field} must be a string`);
+              break;
+            case 'number':
+              errors.push(`${field} must be a number`);
+              break;
+            case 'uuid':
+              errors.push(`${field} must be a valid UUID`);
+              break;
+            case 'positive':
+              errors.push(`${field} must be a positive number`);
+              break;
+            default:
+              errors.push(`${field} failed validation: ${validation}`);
           }
         }
       }
-    });
-
-    if (errors.length > 0) {
-      ctx.status = 400;
-      ctx.body = {
-        errors,
-        message: 'Validation failed',
-      };
-      return;
     }
 
-    await next();
+    if (errors.length > 0) {
+      throw new ValidationError(errors.join('; '));
+    }
+
+    return next();
   };
-};
+}
