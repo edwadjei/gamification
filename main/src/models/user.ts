@@ -6,6 +6,35 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       required:
+ *         - userId
+ *         - username
+ *       properties:
+ *         userId:
+ *           type: string
+ *           format: uuid
+ *           description: The user's unique identifier
+ *         username:
+ *           type: string
+ *           description: The username (must be unique)
+ *         displayName:
+ *           type: string
+ *           description: Display name for the user
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           description: Creation timestamp
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ *           description: Last update timestamp
+ */
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn('uuid')
