@@ -3,7 +3,7 @@ import { Element } from '../models/element';
 import { ValidationError } from '../middleware/error-handlers/validation-error';
 import { v4 as uuidv4 } from 'uuid';
 import { validate as uuidValidate } from 'uuid';
-// import { calculateUserScores } from '../jobs/calculate-scores.job';
+import { calculateUserScores } from '../jobs/calculate-scores.job';
 
 export const elementService = {
   async createElement(
@@ -62,6 +62,6 @@ export const elementService = {
     await elementRepository.save(element);
 
     // TODO: Trigger score calculation job
-    // await calculateUserScores(elementId);
+    await calculateUserScores(elementId);
   },
 };
